@@ -1,6 +1,6 @@
 {
   "name": "dumbdb_srv",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ain't couchdb. dumbdb_srv ain't couchdb either, but attempts a close-enough HTTP interface.",
   "main": "dumbdb_srv.js",
   "scripts": {
