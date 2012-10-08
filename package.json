@@ -1,0 +1,25 @@
+{
+  "name": "dumbdb_srv",
+  "version": "0.0.1",
+  "description": "ain't couchdb. dumbdb_srv ain't couchdb either, but attempts a close-enough HTTP interface.",
+  "main": "dumbdb_srv.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/JosePedroDias/dumbdb_srv.git"
+  },
+  "keywords": [
+    "nodb",
+    "key-value-store",
+    "node.js",
+    "http"
+  ],
+  "author": "José Pedro Dias <jose.pedro.dias@gmail.com>",
+  "license": "BSD",
+  "engines": { "node": "*" },
+  "dependencies": {
+    "express": ">= 3.0.0"
+  }
+}

@@ -6,7 +6,7 @@ dumbdb_srv.js
 summary
 -------
 
-[dumbdb](https://github.com/JosePedroDias/dumbdb) ain't couchdb. dumbdb_srv ain't couchdb either, but attempts a clone-enough HTTP interface.
+[dumbdb](https://github.com/JosePedroDias/dumbdb) ain't couchdb. dumbdb_srv ain't couchdb either, but attempts a close-enough HTTP interface.
 
 as in dumbdb, there are no _revs or attachments. mapReduce will be exposed ASAP O:)
 
