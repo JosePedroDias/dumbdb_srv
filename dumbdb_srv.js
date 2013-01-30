@@ -33,7 +33,7 @@ var dumbdb_srv = function(cfg) {
         var c = colls[coll];
 
         if (!c) {
-            return dumbdb.open(coll, function(err, c) {
+            return dumbdb.open(coll, true, function(err, c) {
                 if (err) { return res.send({status:'error', msg:'collection ' + coll + ' not found!'}); }
                 colls[coll] = c;
                 cb(null, c);
@@ -109,7 +109,7 @@ var dumbdb_srv = function(cfg) {
         var coll = req.params.coll;
 
         if (!req.is('application/json')) {
-            return dumbdb.create(coll, function(err, c) {
+            return dumbdb.create(coll, true, function(err, c) {
                 if (err) { return res.send({status:'error', msg:err}); }
                 colls[coll] = c;
                 res.send({status:'ok', msg:'collection ' + coll + ' created.'});
