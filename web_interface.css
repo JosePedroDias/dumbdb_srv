@@ -1,0 +1,35 @@
+body {
+	font-family: 		sans-serif;
+}
+
+div {
+	xdisplay:			inline-block;
+	border:				1px solid #AAA;
+	background-color: 	#DED;
+}
+
+label {
+	font-weight: 		bold;
+	display: 			inline-block;
+	width: 				80px;
+}
+
+p {
+	margin:				0;
+}
+
+.left {
+	position:			fixed;
+	top:				0;
+	bottom:				0;
+	left:				0;
+	width:				50%;
+}
+
+.right {
+	position:			fixed;
+	top:				0;
+	right:				0;
+	bottom:				0;
+	width:				50%;
+}
