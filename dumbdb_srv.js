@@ -1,131 +1,161 @@
-var express = require('express');
-
-//var dumbdb = require('../dumbdb/dumbdb')({
-var dumbdb = require('dumbdb')({
-    rootDir: __dirname,
-    verbose: true
-});
-
-
-/*jshint node:true */
-/*global */
-
-
-
-var CFG = {
-    port: 3000
-};
-
-
-
-var dumbdb_srv = function(cfg) {
-
+(function() {
+    
     'use strict';
 
+    /*jshint node:true */
+    /*global */
 
-    if (cfg) {
-        if ('port' in cfg) { CFG.port = cfg.port; }
-    }
 
-    var colls = {};
+    
+    var express = require('express');
 
-    var fetchColl = function(coll, cb, res) {
-        var c = colls[coll];
 
-        if (!c) {
-            return dumbdb.open(coll, true, function(err, c) {
-                if (err) { return res.send({status:'error', msg:'collection ' + coll + ' not found!'}); }
-                colls[coll] = c;
-                cb(null, c);
-            });
-        }
-
-        cb(null, c);
+    
+    var CFG = {
+        port:            3000,
+        dir:             '.',
+        accessControlFn: function(collName, opName) { return true; }
     };
 
 
-    // -----------------
-    
-    
-    var app = express();
 
+    var dumbdb_srv = function(cfg) {
 
-    app.use( express.bodyParser() );
-
-
-    // CORS
-    app.all('*', function(req, res, next) {
-        res.header('Access-Control-Allow-Origin', '*');
-        next();
-    });
-
-
-    app.get('/:coll/:id', function(req, res) {
-        var coll = req.params.coll;
-        var id   = req.params.id;
-
-        fetchColl(coll, function(err, c) {
-            var o = c.get(id);
-            if (!o) { return res.send({status:'error', msg:'item not found!'}); }
-
-            if ('_contentType' in o) {
-                res.set('Content-Type', o._contentType);
-            }
-            
-            res.send(o);
-        }, res);
-    });
-
-
-    app.get('/:coll', function(req, res) {
-        var coll = req.params.coll;
-
-        fetchColl(coll, function(err, c) {
-            res.send( c.all() );
-        }, res);
-    });
-
-
-    app.get('/', function(req, res) {
-        res.send({
-            msg: 'hello from dumbdb'
-        });
-    });
-
-
-    app['delete']('/:coll/:id', function(req, res) {
-        var coll = req.params.coll;
-        var id   = req.params.id;
-
-        fetchColl(coll, function(err, c) {
-            var o = c.del(id);
-            if (!o) { return res.send({status:'error', msg:'item not found!'}); }
-            res.send({status:'ok'});
-        }, res);
-    });
-
-
-    app.post('/:coll', function(req, res) {
-        var coll = req.params.coll;
-
-        if (!req.is('application/json')) {
-            return dumbdb.create(coll, true, function(err, c) {
-                if (err) { return res.send({status:'error', msg:err}); }
-                colls[coll] = c;
-                res.send({status:'ok', msg:'collection ' + coll + ' created.'});
-            });
+        if (cfg) {
+            if ('port'            in cfg) { CFG.port            = cfg.port; }
+            if ('dir'             in cfg) { CFG.dir             = cfg.dir; }
+            if ('accessControlFn' in cfg) { CFG.accessControlFn = cfg.accessControlFn; }
         }
 
-        fetchColl(coll, function(err, c) {
-            res.send( c.put(req.body) );
-        }, res);
-    });
+        var colls = {};
+
+        /*var fetchColl = function(coll, cb, res) {
+            var c = colls[coll];
+
+            if (!c) {
+                return dumbdb.open(coll, true, function(err, c) {
+                    if (err) { return res.send({status:'error', msg:'collection ' + coll + ' not found!'}); }
+                    colls[coll] = c;
+                    cb(null, c);
+                });
+            }
+
+            cb(null, c);
+        };*/
+
+
+        // -----------------
+        
+        
+        var app = express();
+
+
+        app.use( express.bodyParser() );
+
+
+        // CORS
+        app.all('*', function(req, res, next) {
+            res.header('Access-Control-Allow-Origin', '*');
+            next();
+        });
+
+
+        // GETS
+
+        app.get('/:coll/:id/delete', function(req, res) {
+            var coll = req.params.coll;
+            var id   = req.params.id;
+
+            res.send(coll + '.delete("' + id +'")');
+        });
+
+        app.get('/:coll/:id/:rev/download', function(req, res) {
+            var coll = req.params.coll;
+            var id   = req.params.id;
+            var rev  = req.params.rev;
+
+            res.send(coll + '.getBin("' + id +'", ' + rev + ')');
+        });
+
+        app.get('/:coll/:id/download', function(req, res) {
+            var coll = req.params.coll;
+            var id   = req.params.id;
+
+            res.send(coll + '.getBin("' + id +'")');
+        });
+
+        app.get('/:coll/:id/revisions', function(req, res) {
+            var coll = req.params.coll;
+            var id   = req.params.id;
+
+            res.send(coll + '.getRevisions("' + id +'")');
+        });
+
+        app.get('/:coll/:id/:rev', function(req, res) {
+            var coll = req.params.coll;
+            var id   = req.params.id;
+            var rev  = req.params.rev;
+
+            res.send(coll + '.get("' + id +'", ' + rev + ')');
+        });
+
+        app.get('/:coll/:id', function(req, res) {
+            var coll = req.params.coll;
+            var id   = req.params.id;
+
+            res.send(coll + '.get("' + id +'")');
+        });
+
+        app.get('/:coll', function(req, res) {
+            var coll = req.params.coll;
+
+            res.send(coll + '.all()');
+        });
+
+        app.get('/', function(req, res) {
+            res.send({
+                msg: 'Hello from dumbdb_srv!'
+            });
+        });
+
+
+        // POSTS
+        
+        app.post('/:coll/:id/upload', function(req, res) {
+            var coll = req.params.coll;
+            var id   = req.params.id;
+
+            res.send(coll + '.setBin("' + id +'", postData)');
+        });
+
+        app.post('/:coll/upload', function(req, res) {
+            var coll = req.params.coll;
+
+            res.send(coll + '.createBin(postData)');
+        });
+
+        app.post('/:coll/:id', function(req, res) {
+            var coll = req.params.coll;
+            var id   = req.params.id;
+
+            res.send(coll + '.set("' + id +'", postData)');
+        });
+
+        app.post('/:coll', function(req, res) {
+            var coll = req.params.coll;
+
+            res.send(coll + '.create(postData)');
+        });
+        
 
 
 
-    app.listen( CFG.port );
-};
+        app.listen( CFG.port );
+        console.log('serving http dumbdb_srv server from port ' + CFG.port + '...');
+    };
 
 
 
-module.exports = dumbdb_srv;
+    module.exports = dumbdb_srv;
+    
+})();
