@@ -3,7 +3,6 @@ body {
 }
 
 div {
-	xdisplay:			inline-block;
 	border:				1px solid #AAA;
 	background-color: 	#DED;
 }

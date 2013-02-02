@@ -7,15 +7,17 @@
 
 		<link rel="stylesheet" type="text/css" href="web_interface.css">
 
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+		<script type="text/javascript" src="http://js.staging.sapo.pt/SAPO/0.1/"></script>
+		<script type="text/javascript" src="http://js.staging.sapo.pt/SAPO/Dom/Event/0.1/"></script>
+		<script type="text/javascript" src="http://js.staging.sapo.pt/SAPO/Communication/Ajax/2.1/"></script>
+
 		<script type="text/javascript" src="web_interface.js"></script>
 	</head>
 
 	<body>
 		<div class="left">
 			<div>
-				<label for="ping">ping:</label>
-				<button onclick="ping()">
+				<button onclick="ping()">ping</button>
 			</div>
 
 			<div>
@@ -29,9 +31,9 @@
 					<input id="id" type="text" value="1">
 				</p>
 				<p>
-					<button onclick="exists(i('col').value, i('id').value)">exists</button>
-					<button onclick="get(i('col').value, i('id').value)">get</button>
-					<button onclick="delet(i('col').value, i('id').value)">delete</button>
+					<button onclick="exists(v('col'), v('id'))">exists</button>
+					<button onclick="get(v('col'), v('id'))">get</button>
+					<button onclick="del(v('col'), v('id'))">delete</button>
 				</p>
 			</div>
 
@@ -49,12 +51,17 @@
 					<input id="age" type="text" value="12">
 				</p>
 				<p>
-					<button onclick="put(i('col').value, {_id:i('id2').value, name:i('name').value, i('age').value})">put</button>
+					<button onclick="create(v('col'), {name:v('name'), age:v('age', 'i')})">create</button>
+					<button onclick="set(v('col'), {_id:v('id2'), name:v('name'), age:v('age', 'i')})">set</button>
+					<button onclick="V('id2'); V('name'); V('age')">clean</button>
 				</p>
 			</div>
 		</div>
 
 		<div class="right">
+			<p>
+				<button onclick="all(v('col'))">all</button>
+			</p>
 		</div>
 	</body>
 </html>
