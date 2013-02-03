@@ -8,13 +8,16 @@
 
     
     var express = require('express');
+    //var dumbdb  = require('dumbdb');
+    var dumbdb  = require('../dumbdb/dumbdb');
 
 
     
     var CFG = {
         port:            3000,
         dir:             '.',
-        accessControlFn: function(collName, opName) { return true; }
+        accessControlFn: function(collName, opName) { return true; },
+        verbose:         false
     };
 
 
@@ -27,13 +30,18 @@
             if ('accessControlFn' in cfg) { CFG.accessControlFn = cfg.accessControlFn; }
         }
 
+        var ddb = dumbdb({
+            dir:     cfg.dir,
+            verbose: true
+        });
+
         var colls = {};
 
-        /*var fetchColl = function(coll, cb, res) {
+        var fetchColl = function(coll, cb, res) {
             var c = colls[coll];
 
             if (!c) {
-                return dumbdb.open(coll, true, function(err, c) {
+                return ddb.open(coll, function(err, c) {
                     if (err) { return res.send({status:'error', msg:'collection ' + coll + ' not found!'}); }
                     colls[coll] = c;
                     cb(null, c);
@@ -41,7 +49,7 @@
             }
 
             cb(null, c);
-        };*/
+        };
 
 
         // -----------------
@@ -76,10 +84,14 @@
             var coll = req.params.coll;
             var id   = req.params.id;
 
-            res.send(coll + '.delete("' + id +'")');
+            if (CFG.verbose) { console.log(coll + '.delete("' + id +'")'); }
+            
+            fetchColl(coll, function(err, coll) {
+                res.send( coll.del(id) );
+            }, res);
         });
 
-        app.get('/:coll/:id/:rev/download', function(req, res) {
+        /*app.get('/:coll/:id/:rev/download', function(req, res) {
             var coll = req.params.coll;
             var id   = req.params.id;
             var rev  = req.params.rev;
@@ -92,13 +104,17 @@
             var id   = req.params.id;
 
             res.send(coll + '.getBin("' + id +'")');
-        });
+        });*/
 
         app.get('/:coll/:id/revisions', function(req, res) {
             var coll = req.params.coll;
             var id   = req.params.id;
 
-            res.send(coll + '.getRevisions("' + id +'")');
+            if (CFG.verbose) { console.log(coll + '.getRevisions("' + id +'")'); }
+            
+            fetchColl(coll, function(err, coll) {
+                res.send( coll.getRevisions(id) );
+            }, res);
         });
 
         app.get('/:coll/:id/:rev', function(req, res) {
@@ -106,20 +122,32 @@
             var id   = req.params.id;
             var rev  = req.params.rev;
 
-            res.send(coll + '.get("' + id +'", ' + rev + ')');
+            if (CFG.verbose) { console.log(coll + '.get("' + id +'", ' + rev + ')'); }
+            
+            fetchColl(coll, function(err, coll) {
+                res.send( coll.get(id, rev) );
+            }, res);
         });
 
         app.get('/:coll/:id', function(req, res) {
             var coll = req.params.coll;
             var id   = req.params.id;
 
-            res.send(coll + '.get("' + id +'")');
+            if (CFG.verbose) { console.log(coll + '.get("' + id +'")'); }
+
+            fetchColl(coll, function(err, coll) {
+                res.send( coll.get(id) );
+            }, res);
         });
 
         app.get('/:coll', function(req, res) {
             var coll = req.params.coll;
 
-            res.send(coll + '.all()');
+            if (CFG.verbose) { console.log(coll + '.all()'); }
+            
+            fetchColl(coll, function(err, coll) {
+                res.send( coll.all() );
+            }, res);
         });
 
         app.get('/', function(req, res) {
@@ -131,7 +159,7 @@
 
         // POSTS
         
-        app.post('/:coll/:id/upload', function(req, res) {
+        /*app.post('/:coll/:id/upload', function(req, res) {
             var coll = req.params.coll;
             var id   = req.params.id;
 
@@ -142,19 +170,27 @@
             var coll = req.params.coll;
 
             res.send(coll + '.createBin(postData)');
-        });
+        });*/
 
         app.post('/:coll/:id', function(req, res) {
             var coll = req.params.coll;
             var id   = req.params.id;
 
-            res.send(coll + '.set("' + id +'", postData)');
+            if (CFG.verbose) { console.log(coll + '.set("' + id +'", postData)'); }
+            
+            fetchColl(coll, function(err, coll) {
+                res.send( coll.set(id, req.body) );
+            }, res);
         });
 
         app.post('/:coll', function(req, res) {
             var coll = req.params.coll;
 
-            res.send(coll + '.create(postData)');
+            if (CFG.verbose) { console.log(coll + '.create(postData)'); }
+            
+            fetchColl(coll, function(err, coll) {
+                res.send( coll.create( req.body ) );
+            }, res);
         });
         
 

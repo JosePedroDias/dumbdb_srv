@@ -2,5 +2,5 @@
 var dumbdb_srv = require('./dumbdb_srv');
 
 dumbdb_srv({
-	port:3000
+	verbose: true
 });
