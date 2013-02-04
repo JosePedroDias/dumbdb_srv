@@ -2,5 +2,6 @@
 var dumbdb_srv = require('./dumbdb_srv');
 
 dumbdb_srv({
-	verbose: true
+	verbose: true,
+	dir:     __dirname
 });

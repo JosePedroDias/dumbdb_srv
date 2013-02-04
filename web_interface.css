@@ -3,8 +3,15 @@ body {
 }
 
 div {
-	border:				1px solid #AAA;
-	background-color: 	#DED;
+	/*border:				1px solid #AAA;*/
+	background-color: 	#EEE;
+}
+
+body > div > div {
+	margin: 10px 5px;
+	padding: 10px;
+	background-color:  #FFF;
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.33);
 }
 
 label {

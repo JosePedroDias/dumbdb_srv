@@ -1,21 +1,20 @@
-dumbdb_srv.js
-=============
+# dumbdb_srv.js
 
 
 
-summary
--------
+## Summary
 
-[dumbdb](https://github.com/JosePedroDias/dumbdb) ain't couchdb. dumbdb_srv ain't couchdb either, but attempts a close-enough HTTP interface.
-
-as in dumbdb, there are no _revs or attachments. mapReduce will be exposed ASAP O:)
-
-it's running on port 3000 but configuration parameteres will be exposed too.
+HTTP API for dumbdb](https://github.com/JosePedroDias/dumbdb). Kinda inspired on couchdb.
 
 
 
-api
----
+## TODO
+
+* improve this doc ASAP
+
+
+
+## API
 
 `GET /`
 
@@ -47,6 +46,6 @@ api
 
 ----
 
-`DELETE /person/1`
+`GET /person/1/delete`
 
 `{"status":"ok"}`

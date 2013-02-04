@@ -23,6 +23,9 @@
 			<div>
 				<label for="col">col:</label>
 				<input id="col" type="text" value="person">
+				<button onclick="clear(v('col'))">clear</button>
+				<button onclick="close(v('col'))">close</button>
+				<button onclick="drop(v('col'))">drop</button>
 			</div>
 
 			<div>
@@ -31,9 +34,17 @@
 					<input id="id" type="text" value="1">
 				</p>
 				<p>
+					<label for="rev">rev:</label>
+					<input id="rev" type="text" value="">
+				</p>
+				<p>
 					<button onclick="exists(v('col'), v('id'))">exists</button>
-					<button onclick="get(v('col'), v('id'))">get</button>
+					<button onclick="get(v('col'), v('id'), v('rev', 'i') ? v('rev', 'i') : undefined)">get</button>
 					<button onclick="del(v('col'), v('id'))">delete</button>
+					<button onclick="restore(v('col'), v('id'))">restore</button>
+					<button onclick="getRevisions(v('col'), v('id'))">getRevisions</button>
+					<button onclick="getRevisionDates(v('col'), v('id'))">getRevisionDates</button>
+					<button onclick="discardRevisions(v('col'), v('id'))">discardRevisions</button>
 				</p>
 			</div>
 
@@ -52,8 +63,8 @@
 				</p>
 				<p>
 					<button onclick="create(v('col'), {name:v('name'), age:v('age', 'i')})">create</button>
-					<button onclick="set(v('col'), {_id:v('id2'), name:v('name'), age:v('age', 'i')})">set</button>
-					<button onclick="V('id2'); V('name'); V('age')">clean</button>
+					<button onclick="sett(v('col'), {_id:v('id2'), name:v('name'), age:v('age', 'i')})">set</button>
+					<button onclick="V('id2'); V('name'); V('age')">clear form</button>
 				</p>
 			</div>
 		</div>
